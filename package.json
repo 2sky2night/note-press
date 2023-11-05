@@ -1,0 +1,19 @@
+{
+  "name": "note-vitepress",
+  "version": "1.0.0",
+  "description": "个人笔记网站",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "vitepress": "1.0.0-rc.24"
+  }
+}
