@@ -1,10 +1,16 @@
 import { defineConfig } from "vitepress";
-import { InterviewDirectory, questionDirectory } from "./dirs";
+import { InterviewDirectory, questionDirectory, studyDirectory } from "./dirs";
 
-// js相关的面试题的侧边栏导航
+// js相关面试题的侧边栏导航
 const InterviewJS = InterviewDirectory.JS();
+// html相关面试题的侧边栏
+const InterviewHTML = InterviewDirectory.HTML();
+// CSS相关面试题的侧边栏
+const InterviewCSS = InterviewDirectory.CSS();
 // 问题的侧边导航栏
-const question = questionDirectory();
+const Question = questionDirectory();
+// 学习的技术栈
+const Study = studyDirectory();
 
 const config = defineConfig({
   title: "Kinght的小屋",
@@ -20,6 +26,7 @@ const config = defineConfig({
     ],
   ],
   themeConfig: {
+    lastUpdated: {},
     search: {
       provider: "local",
     },
@@ -42,8 +49,11 @@ const config = defineConfig({
       { text: "踩过的坑", link: "/question" },
     ],
     sidebar: {
+      "/study": Study,
       "/interview/js": InterviewJS,
-      "/question": question,
+      "/interview/html": InterviewHTML,
+      "/interview/css": InterviewCSS,
+      "/question": Question,
     },
   },
 });

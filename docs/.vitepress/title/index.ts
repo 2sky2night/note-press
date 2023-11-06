@@ -24,6 +24,26 @@ export const JSTitle = {
 };
 
 /**
+ * HTML面试题文件与标题映射表
+ */
+export const HTMLTitle = {
+  "src-href": "src和href的区别",
+  "async-load": "异步加载脚本",
+  html5: "HTML5新增",
+  doctype: "DOCTYPE的作用",
+};
+
+/**
+ * CSS面试题文件与标题映射表
+ */
+export const CSSTitle = {
+  bfc: "BFC",
+  "margin-padding": "magrin的取值",
+  "z-index": "层叠上下文",
+  selector: "CSS选择器",
+};
+
+/**
  * 遇到的坑映射表(一级标题-二级标题：一级文件夹的名称-对应文件的名称)
  */
 export const questionTitle = {

@@ -1,4 +1,4 @@
-import { JSTitle, questionTitle } from "../title";
+import { JSTitle, questionTitle, HTMLTitle, CSSTitle } from "../title";
 import { getFilename, getDir, getTitle } from "../tools";
 import { DefaultTheme } from "vitepress";
 
@@ -6,12 +6,39 @@ import { DefaultTheme } from "vitepress";
  * 面试相关的目录
  */
 export const InterviewDirectory = {
+  /**
+   * HTML面试题
+   */
+  HTML() {
+    return getDir("/interview/html").map((filename) => {
+      const _filename = getFilename(filename);
+      return {
+        text: getTitle(_filename, HTMLTitle),
+        link: `/interview/html/${_filename}`,
+      };
+    });
+  },
+  /**
+   * JS面试题
+   */
   JS() {
     return getDir("/interview/js").map((fileName) => {
       const _filename = getFilename(fileName);
       return {
         text: getTitle(_filename, JSTitle),
         link: `/interview/js/${_filename}`,
+      };
+    });
+  },
+  /**
+   * CSS面试题相关
+   */
+  CSS() {
+    return getDir("/interview/css").map((filename) => {
+      const _filename = getFilename(filename);
+      return {
+        text: getTitle(_filename, CSSTitle),
+        link: `/interview/css/${_filename}`,
       };
     });
   },
@@ -41,4 +68,17 @@ export const questionDirectory = () => {
     });
   });
   return nav;
+};
+
+/**
+ * 学习的技术栈的目录
+ */
+export const studyDirectory = () => {
+  return getDir("/study").map((filename) => {
+    const _filename = getFilename(filename);
+    return {
+      text: _filename,
+      link: `/study/${_filename}`,
+    };
+  });
 };
