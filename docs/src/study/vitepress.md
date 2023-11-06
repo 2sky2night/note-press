@@ -736,22 +736,372 @@ ewf
 qwdwqd
 ```
 
-## 问题
-
-### 1."vitepress" resolved to an ESM file
-
-​ 详细错误："vitepress" resolved to an ESM file. ESM file cannot be loaded by `require`. See http://vitejs.dev/guide/troubleshooting.html#this-package-is-esm-only for more details. [plugin externalize-deps]
-
-​ 解决方法:在`package.json`中添加`"type":"module"`配置即可。
-
-```json
-  "type": "module"
-```
-
 ## 留言功能
 
-1. https://juejin.cn/post/7238999090222497852?searchId=202311021347312E4B2FBD548A330F6846
-2. https://slbyml.github.io/saves/blog.html#%E6%B7%BB%E5%8A%A0giscus%E8%AF%84%E8%AE%BA
+### Giscus
+
+#### 1.安装依赖
+
+```shell
+pnpm install @giscus/vue
+```
+
+#### 2. 在 github 上安装 giscus 应用
+
+[点击前往安装](https://github.com/apps/giscus)
+
+#### 3. 前往仓库进行配置
+
+选择 giscus 连接到的仓库。请确保：
+
+- 该仓库是公开的，否则访客将无法查看 discussion。
+- giscus app 已安装，否则访客将无法评论和回应。
+- Discussions 功能已在你的仓库中启用。
+
+给仓库开启讨论功能:
+<img src='/imgs/study/vitepress/01.png' alt='仓库开启讨论功能'>
+
+#### 4. 前往 giscus 网页检查仓库是否可以使用讨论功能
+
+[点击前往配置](https://giscus.app/zh-CN)
+
+配置成功后的结果:
+
+<img src='/imgs/study/vitepress/02.png' alt='仓库配置giscus成功后的结果'>
+
+配置成功后分配的 appid：
+
+<img src='/imgs/study/vitepress/03.png' alt='仓库配置giscus成功后的结果'>
+
+下列为示例
+
+```html
+<script
+  src="https://giscus.app/client.js"
+  data-repo="2sky2night/note-press"
+  data-repo-id="R_kgDOKpx2iw"
+  data-category="Announcements"
+  data-category-id="DIC_kwDOKpx2i84Catge"
+  data-mapping="pathname"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="bottom"
+  data-theme="preferred_color_scheme"
+  data-lang="zh-CN"
+  crossorigin="anonymous"
+  async></script>
+```
+
+#### 5.创建评论组件
+
+创建后就可以在 md 文件中导入使用评论功能了。但是我们最好把评论组件注册到全局或直接在布局中使用该组件，这样就不需要每个页面都引入该组件了。
+
+```vue
+<template>
+  <Giscus
+    repo="2sky2night/note-press"
+    repo-id="R_kgDOKpx2iw"
+    category="Announcements"
+    category-id="DIC_kwDOKpx2i84Catge"
+    mapping="pathname"
+    strict="0"
+    reactions-enabled="1"
+    emit-metadata="0"
+    input-position="bottom"
+    theme="preferred_color_scheme"
+    lang="zh-CN"
+    crossorigin="anonymous"
+    async />
+</template>
+
+<script lang="ts" setup>
+import Giscus from "@giscus/vue";
+</script>
+```
+
+#### 6.在 page 页面底部统一添加评论
+
+若我们在每个 md 文件都去引入评论组件，那也太麻烦了。我们可以通过修改默认主题，给默认主题添加对应插槽，将评论组件注入到对应插槽中去即可。
+
+##### 创建 layout 文件
+
+在`.vitepress/theme`下创建`layout/index.vue`用来保存布局，通过导入 vitepress 提供的 Layout 组件（这个组件包含了整个默认主题的内容），并引入评论组件，添加到 Layout 组件对应插槽中去即可。
+
+:::tip
+`doc-footer-before`既是 Layout 组件提供的插槽，其只有在`formatter`配置下的 layout 为 doc 才会显示的插槽，其位置在文档底部之前，很适合插入我们的评论组件。
+:::
+
+```vue
+<template>
+  <Layout>
+    <template #doc-footer-before><Comment /> </template>
+  </Layout>
+</template>
+
+<script lang="ts" setup>
+import DefaultTheme from "vitepress/theme";
+import Comment from "../../../components/giscus/index.vue";
+const { Layout } = DefaultTheme;
+</script>
+```
+
+##### 覆盖默认主题
+
+在`.vitepress/theme`创建 index.ts 文件，即可覆盖默认主题。
+
+```ts
+import Layout from "./layouts/index.vue";
+
+export default {
+  Layout,
+  enhanceApp({ app, router, siteData }) {
+    // ...
+  },
+};
+```
+
+#### 7.评论主题与网页主题同步
+
+评论主题在默认情况下是不同步的，所以我们需要自己去完善评论的逻辑，实现评论主题自适应。
+
+:::tip
+`useData` 这个钩子提供了网页相关的配置，包括了主题，并且该数据是响应式的。
+:::
+
+```vue
+<template>
+  <Giscus
+    repo="2sky2night/note-press"
+    repo-id="R_kgDOKpx2iw"
+    category="Announcements"
+    category-id="DIC_kwDOKpx2i84Catge"
+    mapping="pathname"
+    strict="0"
+    reactions-enabled="1"
+    emit-metadata="0"
+    input-position="bottom"
+    :theme="isDark"
+    lang="zh-CN"
+    crossorigin="anonymous"
+    async />
+</template>
+
+<script lang="ts" setup>
+import { computed } from "vue";
+import { useData } from "vitepress";
+import Giscus from "@giscus/vue";
+
+const pageData = useData();
+
+const isDark = computed(() => {
+  return pageData.isDark.value ? "dark" : "light";
+});
+</script>
+```
+
+#### 8.评论数据异常
+
+若我们将评论组件放置在布局底部后，就会出现异常，当我们浏览当前页面的评论后，进入另一个页面，会出现评论数据并没有重新加载当前页的评论。
+
+其实我们只需要通过`key`属性来强制刷新该组件即可。
+
+```vue
+<template>
+  <Giscus
+    :key="route.path"
+    repo="2sky2night/note-press"
+    repo-id="R_kgDOKpx2iw"
+    category="Announcements"
+    category-id="DIC_kwDOKpx2i84Catge"
+    mapping="pathname"
+    strict="0"
+    reactions-enabled="1"
+    emit-metadata="0"
+    input-position="bottom"
+    :theme="isDark"
+    lang="zh-CN"
+    crossorigin="anonymous"
+    async />
+</template>
+
+<script lang="ts" setup>
+import { computed, watch } from "vue";
+import { useData, useRoute } from "vitepress";
+import Giscus from "@giscus/vue";
+
+const pageData = useData();
+const route = useRoute();
+
+const isDark = computed(() => {
+  return pageData.isDark.value ? "dark" : "light";
+});
+
+defineOptions({ name: "Comment" });
+</script>
+```
+
+## 自定义
+
+### 1.自定义主题
+
+通过使用自定义主题来覆盖 vitepress 的默认主题，整个页面的布局可以由自己来控制。主题相关的文件需要在`.vitepress/theme`下配置。
+
+::: tip
+你可以通过创建一个 .vitepress/theme/index.js 或 .vitepress/theme/index.ts 文件 (即“主题入口文件”) 来启用自定义主题。
+
+当检测到存在主题入口文件时，VitePress 总会使用自定义主题而不是默认主题。但你可以拓展默认主题来在其基础上实现更高级的定制。
+:::
+
+#### 创建布局组件
+
+在`.vitepress/theme`下创建 Layout.vue 文件，并定义布局组件。
+
+:::warning 注意
+使用自定义主题布局后，若需要显示文章内容，可以通过`vitepress`提供的 Content 组件，Content 组件为页面的入口组件。
+:::
+
+```vue
+<template>
+  <div class="layouts-container">
+    <h1>ok</h1>
+    <Content></Content>
+  </div>
+</template>
+
+<script lang="ts" setup>
+// Content为md文件的视图入口，所有的路由（md页面）组件都会在content组件中展示
+import { Content } from "vitepress";
+</script>
+
+<style scoped>
+.layouts-container {
+}
+</style>
+```
+
+#### 使用自定义布局组件
+
+在`.vitepress/theme`下创建 index.ts 文件，并覆盖默认主题。
+
+```ts
+import Layout from "./Layouts.vue";
+
+export default {
+  Layout,
+  enhanceApp({ app, router, siteData }) {
+    // ...
+  },
+};
+```
+
+这样就成功的设置了自定义主题，页面的布局完全由自己的配置。
+
+### 2.扩展默认主题
+
+有时我们不想去手动重头搭建整个布局，只是想在默认主题扩充下部分内容。
+
+`vitepress/theme`包下提供了对应的组件，可以让我们对原有组件进行扩充。
+
+#### 定义布局组件
+
+在`.vitepress/theme`下创建`Layout.vue`，并引入`vitepress/theme`提供的组件，该组件中提供了许多插槽，供使用。
+
+```vue
+<template>
+  <div class="layouts-container">
+    <Layout> </Layout>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import DefaultTheme from "vitepress/theme";
+
+const { Layout } = DefaultTheme;
+</script>
+
+<style scoped>
+.layouts-container {
+}
+</style>
+```
+
+#### 覆盖默认主题
+
+```ts
+import Layout from "./Layout.vue";
+
+export default {
+  Layout,
+  enhanceApp({ app, router, siteData }) {
+    // ...
+  },
+};
+```
+
+#### Layout slots
+
+默认主题布局的全部可用插槽如下：
+
+##### 当 layout: 'doc' (默认) 在 frontmatter 中被启用时
+
+1. doc-top
+
+2. doc-bottom
+
+3. doc-footer-before
+
+4. doc-before
+
+5. doc-after
+
+6. sidebar-nav-before
+
+7. sidebar-nav-after
+
+8. aside-top
+
+9. aside-bottom
+
+10. aside-outline-before
+
+11. aside-outline-after
+
+12. aside-ads-before
+
+13. aside-ads-after
+
+##### 当 layout: 'home' 在 frontmatter 中被启用时
+
+1. home-hero-before
+
+2. home-hero-info
+
+3. home-hero-image
+
+4. home-hero-after
+
+5. home-features-before
+
+6. home-features-after
+
+##### 当 layout: 'page' 在 frontmatter 中被启用时
+
+1. page-top
+2. page-bottom
+
+##### 当未找到页面 (404) 时:
+
+总是启用:
+
+1. layout-top
+2. layout-bottom
+3. nav-bar-title-before
+4. nav-bar-title-after
+5. nav-bar-content-before
+6. nav-bar-content-after
+7. nav-screen-content-before
+8. nav-screen-content-after
 
 ## 搜索功能
 
@@ -765,6 +1115,22 @@ export defualt {
     	}
     }
 }
+```
+
+## 部署
+
+
+
+## 问题
+
+### 1."vitepress" resolved to an ESM file
+
+​ 详细错误："vitepress" resolved to an ESM file. ESM file cannot be loaded by `require`. See http://vitejs.dev/guide/troubleshooting.html#this-package-is-esm-only for more details. [plugin externalize-deps]
+
+​ 解决方法:在`package.json`中添加`"type":"module"`配置即可。
+
+```json
+  "type": "module"
 ```
 
 ## 文档或参考

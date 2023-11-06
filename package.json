@@ -15,5 +15,8 @@
   "devDependencies": {
     "@types/node": "^20.8.10",
     "vitepress": "1.0.0-rc.24"
+  },
+  "dependencies": {
+    "@giscus/vue": "^2.3.0"
   }
 }
