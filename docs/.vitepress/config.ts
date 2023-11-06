@@ -13,6 +13,7 @@ const Question = questionDirectory();
 const Study = studyDirectory();
 
 const config = defineConfig({
+  base:'/note-press/',
   title: "Kinght的小屋",
   outDir: "../dist",
   srcDir: "./src",
