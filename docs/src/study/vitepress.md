@@ -1119,7 +1119,9 @@ export defualt {
 
 ## 部署
 
-
+1. https://juejin.cn/post/6844904122873806856
+2. https://zhuanlan.zhihu.com/p/562139569
+3. https://zhuanlan.zhihu.com/p/631088671
 
 ## 问题
 

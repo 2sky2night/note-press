@@ -1,5 +1,5 @@
 ---
-outline: [1, 2]
+outline: [1, 2, 3]
 ---
 
 # Nest.js
@@ -38,13 +38,13 @@ nest new project-name //js
 nest new --strict project-name
 ```
 
-搭建好后的目录如下
-src
-├── app.controller.spec.ts 对于基本控制器的单元测试样例
-├── app.controller.ts 带有单个路由的基本控制器示例。
-├── app.module.ts 应用程序的根模块
-├── app.service.ts 带有单个方法的基本服务
-└── main.ts 入口文件
+搭建好后的目录如下:
+
+1. app.controller.spec.ts 对于基本控制器的单元测试样例
+2. app.controller.ts 带有单个路由的基本控制器示例。
+3. app.module.ts 应用程序的根模块
+4. app.service.ts 带有单个方法的基本服务
+5. main.ts 入口文件
 
 ```shell
 pnpm run start:dev 来启动应用
@@ -89,7 +89,9 @@ import { StudentModule } from "./modules/student/student.module";
 export class AppModule {}
 ```
 
-## student 路由模块编写
+## 一个模块的简单示例
+
+下列为搭建一个`student`模块的例子。
 
 在 src 中创建 modules 文件夹，再创建对应模块的文件夹 student，在里面分别配置 controller、service、模块导出文件。
 
@@ -133,6 +135,8 @@ export class StudentService {
 
 ### 模块
 
+`student`模块由此完成，就可以注册到 app 根模块，应用就可以添加上`student`模块的路由了。
+
 ```ts
 import { Module } from "@nestjs/common";
 import { StudentController } from "./student.controller";
@@ -166,6 +170,7 @@ bootstrap();
 
 ## 文件结构
 
+```
 nodejs
 ├── package.json
 ├── README.md
@@ -216,6 +221,7 @@ nodejs
 ├── test （单元测试）
 │ ├── app.e2e-spec.ts
 ├── tsconfig.json
+```
 
 # 一、控制层
 
@@ -223,9 +229,9 @@ Nest.js 的控制层都是整合了路由的，所以一个控制层可以代表
 
 ## 1.Controller 装饰器
 
-​ controller 类装饰器用来告诉 Nest 应用，在处理某个 http 请求时下发到对应的控制层。**controller 注释器的作用其实就是用来配置模块的根路由**
+ controller 类装饰器用来告诉 Nest 应用，在处理某个 http 请求时下发到对应的控制层。**controller 注释器的作用其实就是用来配置模块的根路由**
 
-​ 可以传一个参数，这个参数就是该控制层的路由根路径，配置了根路径后，该控制层中所有的路由路径在请求时路径前缀都需要加上路由根路径。
+ 可以传一个参数，这个参数就是该控制层的路由根路径，配置了根路径后，该控制层中所有的路由路径在请求时路径前缀都需要加上路由根路径。
 
 ```ts
 import { Controller, Get } from "@nestjs/common";
@@ -347,7 +353,7 @@ Header 装饰器可以快速的给响应头部注入内容
 
 ## 6.路由路径参数(动态路径)
 
-​ 通过配置路径参数，就可以达成不同路径执行相同处理函数的功能。
+ 通过配置路径参数，就可以达成不同路径执行相同处理函数的功能。
 
 ```ts
   @Get(':id/:name') // pathname:/1/mark
@@ -361,9 +367,11 @@ Header 装饰器可以快速的给响应头部注入内容
 
 ### 拦截器
 
-​ 拦截器：https://juejin.cn/post/6844903939196846087、https://wdk-docs.github.io/nest-docs/interceptors/ 、https://juejin.cn/post/7220070434188214332#heading-3、https://juejin.cn/post/7217795158367682597
+做响应处理和异常响应处理，都需要使用 Nest 的拦截器功能。
 
-​ 做响应处理和异常响应处理，都需要使用 Nest 的拦截器功能，拦截器是什么？拦截器就是客户端请求到服务端时会拦截（请求拦截器），服务端向客户端响应内容时会拦截（响应拦截器），其主要功能有
+拦截器是什么？拦截器就是客户端请求到服务端时会拦截（请求拦截器），服务端向客户端响应内容时会拦截（响应拦截器）。Nest 的拦截器很像 axios 里面的请求拦截器和响应拦截器。
+
+其主要功能有:
 
 - 在方法执行之前或之后执行**额外的逻辑**，这些逻辑一般不属于业务的一部分
 - **转换**函数执行结果
@@ -375,7 +383,7 @@ Header 装饰器可以快速的给响应头部注入内容
 
 #### 拦截器接口
 
-​ 每个拦截器都需要实现**NestInterceptor**接口的**intercept()**方法，该方法接收两个参数。方法原型如下：
+ 每个拦截器都需要实现**NestInterceptor**接口的**intercept()**方法，该方法接收两个参数。方法原型如下：
 
 ```ts
 function intercept(
@@ -539,9 +547,9 @@ app.useGlobalInterceptors(new AppLogger());
 
 #### 统一的响应处理
 
-​ 通过拦截器可以实现对响应的错误和成功处理的内容进行处理。统一响应一种风格的 response。
+ 通过拦截器可以实现对响应的错误和成功处理的内容进行处理。统一响应一种风格的 response。
 
-​ 使用了 NestInterceptor，Response 类需要实现 NestInterceptor，代码中的 `ResponseInterceptor` 是一个用于统一响应结果的响应拦截器，通过 `map()` 运算符改变响应结果格式，并在结果中添加固定的格式。
+ 使用了 NestInterceptor，Response 类需要实现 NestInterceptor，代码中的 `ResponseInterceptor` 是一个用于统一响应结果的响应拦截器，通过 `map()` 运算符改变响应结果格式，并在结果中添加固定的格式。
 
 ```ts
 import {
@@ -809,15 +817,15 @@ export class InternalErrorFilter implements ExceptionFilter {
 
 ## 8.文件
 
-​ 文件流相关 node 知识前置：https://juejin.cn/post/6844903633788600333
+ 文件流相关 node 知识前置：https://juejin.cn/post/6844903633788600333
 
 ### 文件上传
 
-​ nest 的文件上传使用的是 Multer，专门用来处理 form-data 类型的文件上传。文件上传失败会被全局的过滤器拦截`Catch（HttpException）`，也可以拦截。
+ nest 的文件上传使用的是 Multer，专门用来处理 form-data 类型的文件上传。文件上传失败会被全局的过滤器拦截`Catch（HttpException）`，也可以拦截。
 
 #### 装饰器接收的参数
 
-​ FileInterceptor 接收两个参数，一是解析 form-data 中的哪个字段，第二个是配置项，可以配置文件保存到哪儿，上传数据的限制等等。若不配置 dest 或 storage，文件会保存在内存中。
+ FileInterceptor 接收两个参数，一是解析 form-data 中的哪个字段，第二个是配置项，可以配置文件保存到哪儿，上传数据的限制等等。若不配置 dest 或 storage，文件会保存在内存中。
 
 | Key                 | Description                                               |
 | ------------------- | --------------------------------------------------------- |
@@ -828,7 +836,7 @@ export class InternalErrorFilter implements ExceptionFilter {
 
 #### 单一文件（单字段）
 
-​ FileInterceptor 用来解析 form-data 中的某个字段，UploadedFile 参数装饰器是用来解析文件，注入到控制层处理函数中。
+ FileInterceptor 用来解析 form-data 中的某个字段，UploadedFile 参数装饰器是用来解析文件，注入到控制层处理函数中。
 
 ```ts
 @Controller("file")
@@ -880,7 +888,7 @@ export class FileController {
 
 ##### 一个字段保存多个文件
 
-​ FilesInterceptor 用来解析一个字段有多个文件的。
+ FilesInterceptor 用来解析一个字段有多个文件的。
 
 ```ts
   @Post('/uploads')
@@ -910,7 +918,7 @@ export class FileController {
 
 #### 文件上传统一配置
 
-​ 在上述中案例中，若我们需要对每个文件上传接口配置上传路径、上传大小限制等进行约束就需要给每个路由都需要配置，很麻烦，所以使用统一的文件上传配置方便维护。
+ 在上述中案例中，若我们需要对每个文件上传接口配置上传路径、上传大小限制等进行约束就需要给每个路由都需要配置，很麻烦，所以使用统一的文件上传配置方便维护。
 
 ```ts
 import { Module } from "@nestjs/common";
@@ -965,7 +973,7 @@ export class FileModule {}
 
 ## 9.中间件
 
-​ 在 nest 应用中，中间件就是在调用路由处理函数之前需要做的事情，比如解析请求体、解析 token。。。中间件可以通过上下文访问 req、res。中间件可以在处理函数之前做一些其他事情、结束响应、调用下一个中间件、解析请求数据。
+ 在 nest 应用中，中间件就是在调用路由处理函数之前需要做的事情，比如解析请求体、解析 token。。。中间件可以通过上下文访问 req、res。中间件可以在处理函数之前做一些其他事情、结束响应、调用下一个中间件、解析请求数据。
 
 ### 定义中间件
 
@@ -1117,9 +1125,9 @@ await app.listen(3000);
 
 ## 10.守卫（路由鉴权）
 
-​ 守卫和前端路由守卫一样，可以拦截一些非法请求接口，例如未登录不能请求该接口...，其基本作用就是在执行路由处理函数之前需要做的事情，其实我感觉就是把中间件细分出来守卫的概念，比如说还有拦截器也是同理，在执行前需要做的操作。
+ 守卫和前端路由守卫一样，可以拦截一些非法请求接口，例如未登录不能请求该接口...，其基本作用就是在执行路由处理函数之前需要做的事情，其实我感觉就是把中间件细分出来守卫的概念，比如说还有拦截器也是同理，在执行前需要做的操作。
 
-​ 守卫的执行时机：**守卫在每个中间件之后执行（意味着可以在中间件中解析 token 保存在上下文中，守卫可以对请求的用户进行鉴权）**，但在任何拦截器或管道之前执行。
+ 守卫的执行时机：**守卫在每个中间件之后执行（意味着可以在中间件中解析 token 保存在上下文中，守卫可以对请求的用户进行鉴权）**，但在任何拦截器或管道之前执行。
 
 https://www.ddhigh.com/2019/08/27/nestjs-guard.html
 
@@ -1129,7 +1137,7 @@ https://www.ddhigh.com/2019/08/27/nestjs-guard.html
 
 ## 11.管道（解析和校验参数）
 
-​ 管道是作用在控制层中用来校验输入数据的类型或对输入数据进行类型转换。可以对路由处理函数的参数（查询参数、路径参数、请求体数据）进行验证。验证成功执行处理函数，验证失败响应错误信息。
+ 管道是作用在控制层中用来校验输入数据的类型或对输入数据进行类型转换。可以对路由处理函数的参数（查询参数、路径参数、请求体数据）进行验证。验证成功执行处理函数，验证失败响应错误信息。
 
 `Nest` 自带九个开箱即用的管道，即
 
@@ -1177,7 +1185,7 @@ https://www.ddhigh.com/2019/08/27/nestjs-guard.html
 
 ### 1.校验对象类型的数据
 
-​ 上述是简单的单一数据校验，对于一般的 Post 请求都需要校验整个 DTO。我们采用类校验器来校验处理函数中的 DTO。
+ 上述是简单的单一数据校验，对于一般的 Post 请求都需要校验整个 DTO。我们采用类校验器来校验处理函数中的 DTO。
 
 #### 安装依赖
 
@@ -1187,7 +1195,7 @@ $ npm i --save class-validator class-transformer
 
 #### 编写管道
 
-​ 其实用 Nest 内置 ValidationPipe 管道一样可以完成校验请求体表单，不过不能自定义错误信息了。
+ 其实用 Nest 内置 ValidationPipe 管道一样可以完成校验请求体表单，不过不能自定义错误信息了。
 
 ```ts
 import {
@@ -1262,7 +1270,7 @@ export class UserCreateDto {
 
 ### 2.自定义管道
 
-​ 上述例子就是通过**自定义管道实现校验请求体参数**。不过在有的时候我们也想去校验 query 参数或 params 参数，但 Nest 内置的管道不符合需求，就需要自己定义一个管道了。**transform 可以是一个异步的函数，意味着我们甚至可以在这里去操作 DB，例如删除用户前，查询用户是否存在**
+ 上述例子就是通过**自定义管道实现校验请求体参数**。不过在有的时候我们也想去校验 query 参数或 params 参数，但 Nest 内置的管道不符合需求，就需要自己定义一个管道了。**transform 可以是一个异步的函数，意味着我们甚至可以在这里去操作 DB，例如删除用户前，查询用户是否存在**
 
 #### 定义管道
 
@@ -1308,11 +1316,11 @@ export class PagePipe implements PipeTransform<string, number> {
 
 https://nest.nodejs.cn/security/authentication，案例说最好将登陆注册和用户操作分离出来。
 
-​ 在登录后需要生成用户身份令牌，让用户可以访问一些需要鉴权的接口。
+ 在登录后需要生成用户身份令牌，让用户可以访问一些需要鉴权的接口。
 
 ### 注册 JwtModule
 
-​ 在哪个模块需要使用 jwt 就需要先导入 Jwt 模块，在导入 Jwt 模块时还不要忘了配置 Jwt
+ 在哪个模块需要使用 jwt 就需要先导入 Jwt 模块，在导入 Jwt 模块时还不要忘了配置 Jwt
 
 ```ts
 import { Module } from "@nestjs/common";
@@ -1366,11 +1374,11 @@ export class UserModle {}
 
 ### 鉴权接口
 
-​ 在应用中，有很多接口都是需要一定权限才能访问的，若必须登录才能访问或拥有一定权限才能访问的，在以往的框架中都是使用中间件，在路由处理函数之前执行鉴权逻辑，在 Nest 也是一样的，使用路由守卫来完成身份鉴权的操作。
+ 在应用中，有很多接口都是需要一定权限才能访问的，若必须登录才能访问或拥有一定权限才能访问的，在以往的框架中都是使用中间件，在路由处理函数之前执行鉴权逻辑，在 Nest 也是一样的，使用路由守卫来完成身份鉴权的操作。
 
 #### 1.定义路由守卫
 
-​ 下列只是简单案例，其实我们每次解析 token 时，不仅仅要看 token 是否被解析成功，还需要看该用户是否存在。
+ 下列只是简单案例，其实我们每次解析 token 时，不仅仅要看 token 是否被解析成功，还需要看该用户是否存在。
 
 ```ts
 import {
@@ -1433,7 +1441,7 @@ export class AuthGuard implements CanActivate {
 
 #### 3.当然也可以全局配置哪些路由不需要鉴权的
 
-​ 可以看文档仔细介绍 https://nest.nodejs.cn/security/authentication
+ 可以看文档仔细介绍 https://nest.nodejs.cn/security/authentication
 
 ```ts
 consumer
@@ -1448,7 +1456,7 @@ consumer
 
 #### 4.使用中间件解析 token，保存到上下文
 
-​ 这种场景适用于接口**在有令牌和无令牌时返回不同内容**。
+ 这种场景适用于接口**在有令牌和无令牌时返回不同内容**。
 
 ##### 定义中间件
 
@@ -1681,7 +1689,7 @@ export const Token = createParamDecorator(
 
 ## 15.角色鉴权
 
-​ 在应用中，会存在角色相关的操作，例如 User、Admin，User 只能看文章，Admin 可以增删改查文章。我们可以用中间件处理，当时用了 Nest 就用它内置的最舒服。
+ 在应用中，会存在角色相关的操作，例如 User、Admin，User 只能看文章，Admin 可以增删改查文章。我们可以用中间件处理，当时用了 Nest 就用它内置的最舒服。
 
 https://nest.nodejs.cn/security/authorization
 
@@ -1727,7 +1735,7 @@ export class RoleGuard implements CanActivate {
 
 #### 2.使用守卫
 
-​ 由于守卫也是中间件，我们可以先执行鉴权守卫，解析出用户数据保存在上下文中，这样角色守卫就可以获取上下文中的用户数据，并判断是否有权限访问接口了。
+ 由于守卫也是中间件，我们可以先执行鉴权守卫，解析出用户数据保存在上下文中，这样角色守卫就可以获取上下文中的用户数据，并判断是否有权限访问接口了。
 
 ```ts
   // 给路由处理函数设置元数据 roles：User
@@ -1748,7 +1756,7 @@ export class RoleGuard implements CanActivate {
 
 #### 3.进阶用法
 
-​ 我们可以把 SetMetaData 设置路由角色元数据的操作封装成装饰器，能让我们的代码更语义化。装饰器工厂返回的函数才是真正的功能，所以我们只需要调用 Roles 函数，Roles 函数有返回 SetMetadata 函数调用后的结果就可以啦。
+ 我们可以把 SetMetaData 设置路由角色元数据的操作封装成装饰器，能让我们的代码更语义化。装饰器工厂返回的函数才是真正的功能，所以我们只需要调用 Roles 函数，Roles 函数有返回 SetMetadata 函数调用后的结果就可以啦。
 
 ##### 定义装饰器
 
@@ -1968,7 +1976,7 @@ export class AppModule {}
 
 ## 1.一个基础的 service
 
-​ 服务层负责执行接口的真正业务逻辑，并将结果返回给控制层，其核心就是操作数据库。
+ 服务层负责执行接口的真正业务逻辑，并将结果返回给控制层，其核心就是操作数据库。
 
 ```ts
 import { Injectable } from "@nestjs/common";
@@ -2037,11 +2045,11 @@ export class StudentController {
 
 # 三、数据库
 
-​ 主要介绍 Nest.js 集成 sequlize，数据库驱动为 mysql2。
+ 主要介绍 Nest.js 集成 sequlize，数据库驱动为 mysql2。
 
 ## 1.集成 nest-sequlize
 
-​ nest 内置有集成 seqluze 的，所以用这种更方便。
+ nest 内置有集成 seqluze 的，所以用这种更方便。
 
 ### 1.搭建连接数据库环境
 
@@ -2096,7 +2104,7 @@ https://github.com/Haochen2499/sequelize-typescript-doc-zh
 
 https://github.com/sequelize/sequelize-typescript#column
 
-​ 由于之前学习的是 sequlize，在 sequelize-typescript 中大部分模型字段声明、关系声明都是用的装饰器。
+ 由于之前学习的是 sequlize，在 sequelize-typescript 中大部分模型字段声明、关系声明都是用的装饰器。
 
 ### 3.简单实例
 
@@ -2137,7 +2145,7 @@ export class User extends Model<User> {
 
 #### 3.2 注册模型
 
-​ 让 Sequlize 知道需要控制该表，若数据库下不存在该表，会创建该表，然后还需要在对应模块中注入该模型才能使用。
+ 让 Sequlize 知道需要控制该表，若数据库下不存在该表，会创建该表，然后还需要在对应模块中注入该模型才能使用。
 
 ```ts
 import { SequelizeModule } from "@nestjs/sequelize";
@@ -2196,13 +2204,13 @@ export class UserService {
 
 ## 2.使用 Provider 手动驱动数据库
 
-​ 不使用 nest-sequlize，我们可以通过原生 sequlize+Nest 的依赖注入方式来操作 DB
+ 不使用 nest-sequlize，我们可以通过原生 sequlize+Nest 的依赖注入方式来操作 DB
 
 ### 2.1 数据库连接准备
 
 #### 创建提供者
 
-​ 创建提供者，每个提供者都需要实现**useFactory**方法和 provide 属性（作为 id）
+ 创建提供者，每个提供者都需要实现**useFactory**方法和 provide 属性（作为 id）
 
 ```ts
 // database.provider.ts
@@ -2254,7 +2262,7 @@ export class DatabaseModule {}
 
 #### 1.创建模型提供者
 
-​ 模型提供者主要是为了能够让模块能够使用该模型，操作 DB。
+ 模型提供者主要是为了能够让模块能够使用该模型，操作 DB。
 
 ```ts
 // user.providers.ts
@@ -2270,9 +2278,9 @@ export const userProviders = [
 
 #### 2.导入数据库模块和模型提供者
 
-​ 导入数据库模块主要是为了，建立模型和创建表，**其实数据库模块可以在根模块中导入注册**。
+ 导入数据库模块主要是为了，建立模型和创建表，**其实数据库模块可以在根模块中导入注册**。
 
-​ **注意**，一定要导入模型提供者，这样提供了依赖，服务层才能被注入模型实例。
+ **注意**，一定要导入模型提供者，这样提供了依赖，服务层才能被注入模型实例。
 
 ```ts
 import { Module } from "@nestjs/common";
@@ -2592,7 +2600,7 @@ export const databaseProviders: Provider[] = [
 
 ## 4.数据库字段加密
 
-​ 在数据库中存储的敏感数据是需要加密的，例如用户的密码。加密方法有对称加密和非对称加密，下面演示下对称加密的案例。
+ 在数据库中存储的敏感数据是需要加密的，例如用户的密码。加密方法有对称加密和非对称加密，下面演示下对称加密的案例。
 
 ### 1.封装加解密的函数
 
@@ -2914,9 +2922,9 @@ sequelize.addModels([User, Post, PostLike]);
 
 ### 自定义指定外键名称
 
-​ 有时候**一个表有多个外键**，或**一个表引用了同一个外表中的多个字段**，若直接使用 BelongsTo 但不指定哪一个是外键字段就会出现覆盖的问题。
+ 有时候**一个表有多个外键**，或**一个表引用了同一个外表中的多个字段**，若直接使用 BelongsTo 但不指定哪一个是外键字段就会出现覆盖的问题。
 
-​ 下列案例：实体有照片和用户，用户可以审核和发布照片，一个照片只能被一个用户审核，一个照片只有一个作者。
+ 下列案例：实体有照片和用户，用户可以审核和发布照片，一个照片只能被一个用户审核，一个照片只有一个作者。
 
 photo
 
@@ -3077,15 +3085,15 @@ https://docs.nestjs.cn/10/modules
 
 ## 3.imports
 
-​ imports 接收一个数组，数组中每个元素都是一个模块，代表着导入该模块。这样模块就能使用导入模块的功能了。
+ imports 接收一个数组，数组中每个元素都是一个模块，代表着导入该模块。这样模块就能使用导入模块的功能了。
 
 ## 4.exports
 
-​ exports 可以导出任意内容，导出后，其他模块在导入该模块时候就能使用导出的内容了。
+ exports 可以导出任意内容，导出后，其他模块在导入该模块时候就能使用导出的内容了。
 
-### **共享模块**:
+### **5.共享模块**:
 
-​ 直接导出 CatsService，这样只要导入 CatsModule 的模块都能访问到 CatsService 了。
+ 直接导出 CatsService，这样只要导入 CatsModule 的模块都能访问到 CatsService 了。
 
 ```ts
 import { Module } from "@nestjs/common";
@@ -3112,9 +3120,9 @@ export class CatsModule {}
 export class CoreModule {}
 ```
 
-### 全局模块
+## 5.全局模块
 
-​ 通过@Gobal 修饰全局模块，只要导入一次该模块，就能在所有模块中访问该模块导出的内容了。
+ 通过@Gobal 修饰全局模块，只要导入一次该模块，就能在所有模块中访问该模块导出的内容了。
 
 ```ts
 import { Module, Global } from "@nestjs/common";
@@ -3131,6 +3139,46 @@ export class CatsModule {}
 ```
 
 `@Global` 装饰器使模块成为全局作用域。 全局模块应该只注册一次，最好由根或核心模块注册。 在上面的例子中，`CatsService` 组件将无处不在，而想要使用 `CatsService` 的模块则不需要在 `imports` 数组中导入 `CatsModule`。
+
+## 6.模块的循环依赖
+
+​	若两个模块之间有循环依赖的关系，比如A类需要使用B类，B类型需要使用A类型，则在两个模块在`import`时就会产生循环依赖，我们可以使用`fowardRef`来解决循环依赖的问题。
+
+### 修改之前
+
+​	由于模块之间有循环引用，应用无法启动。
+
+```ts
+@Module({
+    import:[BModule], // A模块依赖B模块
+    export:[AModule] // 导出A模块自身的提供者
+})
+class AModule
+    
+@Module({
+    import:[AModule], // B模块依赖A模块
+    export:[BModule] // 导出B模块自身的提供者
+})
+class BModule
+```
+
+### 修改之后
+
+```ts
+@Module({
+    import:[forwardRef(()=>BModule)], // A模块依赖B模块
+    export:[AModule] // 导出A模块自身的提供者
+})
+class AModule
+    
+@Module({
+    import:[forwardRef(()=>AModule)], // B模块依赖A模块
+    export:[BModule] // 导出B模块自身的提供者
+})
+class BModule
+```
+
+
 
 ## 简单示例
 
@@ -3208,6 +3256,8 @@ export class UserController {
   }
 }
 ```
+
+
 
 # 五、集成 SwaggerUI
 
@@ -3400,3 +3450,7 @@ export class PostCreateResponseDto {
 3. https://juejin.cn/post/7002176233115123725nest.js
 4. https://docs.nestjs.cn/10/techniques?id=sequelize-%e9%9b%86%e6%88%90
 5. https://nestjs.bootcss.com/recipes/sql-sequelize
+   6.​ https://juejin.cn/post/6844903939196846087
+6. https://wdk-docs.github.io/nest-docs/interceptors/
+7. https://juejin.cn/post/7220070434188214332#heading-3
+8. https://juejin.cn/post/7217795158367682597

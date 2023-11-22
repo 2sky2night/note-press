@@ -19,7 +19,7 @@ export const JSTitle = {
   language: "强弱类型语言",
   module: "模块化",
   requestAnimation: "requestAnimation",
-  class: "class相关",
+  class: "Class",
   test: "手写专区",
 };
 
@@ -41,6 +41,7 @@ export const CSSTitle = {
   "margin-padding": "magrin的取值",
   "z-index": "层叠上下文",
   selector: "CSS选择器",
+  "containing-block": "包含块",
 };
 
 /**
@@ -65,12 +66,14 @@ export const questionTitle = {
   "js-09": "设计模式",
   "js-10": "全屏",
   "js-11": "给DOM绑定自定义事件",
+  "js-12": "PWA",
   // node
   "node-01": "响应体类型一览",
   "node-02": "下载文件进度",
   "node-03": "SSE(服务端推送)",
   "node-04": "图片处理",
   "node-05": "解析url编码",
+  "node-06": "__dirname not defined",
   // vue
   "vue-01": "封装轮播图组件",
   "vue-02": "声明组件实例的类型",

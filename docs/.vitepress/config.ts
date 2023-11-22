@@ -13,7 +13,7 @@ const Question = questionDirectory();
 const Study = studyDirectory();
 
 const config = defineConfig({
-  base:'/note-press/',
+  base: "/note-blog/", // 此配置会响应打包时文件的请求根路径，启动项目时会在这个路径下启动
   title: "Kinght的小屋",
   outDir: "../dist",
   srcDir: "./src",
@@ -22,6 +22,7 @@ const config = defineConfig({
       "link",
       {
         rel: "icon",
+        type: "image/svg+xml",
         href: "/icon/vite.svg",
       },
     ],
