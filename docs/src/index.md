@@ -14,7 +14,7 @@ hero:
       link: /guide
     - theme: alt
       text: 在 github 上查看
-      link: https://github.com/vuejs/vitepress
+      link: https://github.com/2sky2night/note-press
 features:
   - icon: 🎉
     title: 学习

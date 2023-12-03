@@ -74,6 +74,7 @@ export const questionTitle = {
   "node-04": "图片处理",
   "node-05": "解析url编码",
   "node-06": "__dirname not defined",
+  "node-07": "媒体流",
   // vue
   "vue-01": "封装轮播图组件",
   "vue-02": "声明组件实例的类型",
@@ -94,13 +95,12 @@ export const questionTitle = {
   "vite-01": "获取静态资源路径的函数",
   "vite-02": "不同模式下启动项目",
   "vite-03": "配置路径别名",
-  "vite-04": "规范化项目搭建",
+  "vite-04": "项目规范化",
   // other
   "other-01": "文件上传",
   "other-02": "PE/PC端判断",
   "other-03": "图片裁剪",
   "other-04": "封装路由参数校验的钩子",
-  "other-05": "前端项目规范化",
   // ts
   "ts-01": "定义window扩展属性",
   "ts-02": "TS类型工具",
