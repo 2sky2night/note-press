@@ -12,11 +12,18 @@
 
 ### [Nuxt](/study/Nuxt)
 
-基于 Node.js 的全栈开发框架，完全支持 Vue 全家桶，网站支持各种渲染方式(CSR、SSR 等等)。
+基于 Node.js 的全栈开发框架，完全支持 Vue 全家桶，网站支持各种渲染方式(CSR、SSR
+等等)。
 
 ### [Node](/study/Node)
 
-一个 Javascript 运行时，拥有 JS 解析引擎、内置模块，可以让 Javascript 在服务端上运行。
+一个 Javascript 运行时，拥有 JS 解析引擎、内置模块，可以让 Javascript 在服务端上
+运行。
+
+## [React](/study/React)
+
+快来使用 React 来构建你的 Web 应用吧，使用你最熟悉的 Javascript 语言以及 React
+内置的 Hooks，定义各种各样的函数式组件，并搭建你的项目吧！
 
 ## 待整理
 
