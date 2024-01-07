@@ -5,9 +5,9 @@ hero:
   name: Kinght的小屋
   text: 个人笔记
   tagline: 一些零散的学习笔记
-  # image:
-  #   src: /logo.png
-  #   alt: 网站的 logo 图片
+  image:
+    src: /icon/vite.svg
+    alt: 网站的 logo 图片
   actions:
     - theme: brand
       text: 快速开始

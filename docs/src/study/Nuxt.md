@@ -1,5 +1,6 @@
 ---
 outline: [1, 2]
+title: Nuxt.js
 ---
 
 # Nuxt
