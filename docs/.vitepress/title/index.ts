@@ -76,6 +76,7 @@ export const questionTitle = {
   "node-06": "__dirname not defined",
   "node-07": "媒体流",
   "node-08": "base64转图片",
+  "node-09": "HTTPS 🔒",
   // vue
   "vue-01": "封装轮播图组件",
   "vue-02": "声明组件实例的类型",
