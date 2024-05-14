@@ -105,6 +105,7 @@ export const questionTitle = {
   "other-02": "PE/PC端判断",
   "other-03": "图片裁剪",
   "other-04": "封装路由参数校验的钩子",
+  "other-05": "antd和tailwind样式冲突",
   // ts
   "ts-01": "定义window扩展属性",
   "ts-02": "TS类型工具",
