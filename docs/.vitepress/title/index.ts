@@ -78,6 +78,7 @@ export const questionTitle = {
   "node-08": "base64转图片",
   "node-09": "HTTPS 🔒",
   "node-10": "大文件上传",
+  "node-11": "图片验证码",
   // vue
   "vue-01": "封装轮播图组件",
   "vue-02": "声明组件实例的类型",
