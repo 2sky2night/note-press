@@ -13,7 +13,12 @@ const Question = questionDirectory();
 const Study = studyDirectory();
 
 const config = defineConfig({
-  base: "/note-blog/", // 此配置会响应打包时文件的请求根路径，启动项目时会在这个路径下启动
+  /**
+   * 此配置会影响打包时文件的请求根路径。
+   * @description If you plan to deploy your site to https://foo.github.io/bar/, then you should set base to '/bar/'.
+   * @see https://vitepress.dev/reference/site-config#base
+   */
+  base: "/note-press/",
   title: "Kinght的小屋",
   outDir: "../dist",
   srcDir: "./src",
