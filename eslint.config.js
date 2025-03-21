@@ -17,4 +17,17 @@ export default defineConfig([
   },
   ...pluginVue.configs["flat/recommended"],
   tseslint.configs.recommended,
+  {
+    ignores: [
+      "**/node_modules/**",
+      "node_modules",
+      "dist",
+      "*.md",
+      "package.json",
+      "pnpm-lock.yaml",
+      "docs/.vitepress/cache/**",
+      ".commitlintrc.cjs",
+      ".prettierrc.cjs",
+    ],
+  },
 ]);
