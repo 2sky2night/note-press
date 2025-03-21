@@ -8,7 +8,7 @@ import path from "node:path";
  */
 export const getTitle = (
   filename: string,
-  titleTable: Record<string, string>
+  titleTable: Record<string, string>,
 ) => {
   const title = Reflect.get(titleTable, filename);
   if (title) {

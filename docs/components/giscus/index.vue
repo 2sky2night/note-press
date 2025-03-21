@@ -32,7 +32,7 @@
     async
     :key="route.path"
     :theme="isDark"
-     />
+  />
 </template>
 
 <script lang="ts" setup>
