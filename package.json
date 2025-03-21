@@ -21,6 +21,7 @@
     "@commitlint/config-conventional": "^18.4.3",
     "@types/node": "^20.8.10",
     "husky": "^8.0.3",
+    "lint-staged": "^15.5.0",
     "prettier": "3.5.3",
     "vitepress": "1.0.0-rc.24"
   },
