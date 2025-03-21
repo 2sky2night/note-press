@@ -1,0 +1,26 @@
+on: push
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: 部署到 GitHub Pages
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 拉取仓库代码
+      uses: actions/checkout@v4
+
+    - name: 安装依赖
+      run: pnpm install
+
+    - name: 打包项目文件
+      run: pnpm run docs:build
+
+    - name: 部署到 GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BRANCH: gh-pages # 对应需要部署的分支。这里会把前一步打包的目录文件提交到 gh-pages 分支，最终部署这个分支的文件（打包文件）到 GitHub Pages
+        FOLDER: dist # 项目打包后的目录
