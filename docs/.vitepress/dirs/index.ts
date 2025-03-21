@@ -49,6 +49,7 @@ export const InterviewDirectory = {
  */
 export const questionDirectory = () => {
   const nav: DefaultTheme.Sidebar = [];
+  /** question文件夹中的所有文件 */
   const dirList = getDir("/question");
   dirList.forEach((dirname) => {
     const rootLink = `/question/${dirname}`;
