@@ -30,4 +30,17 @@ export default defineConfig([
       ".prettierrc.cjs",
     ],
   },
+  {
+    files: ["**/*.vue"],
+    languageOptions: {
+      parserOptions: {
+        parser: "@typescript-eslint/parser", // 内部使用 TypeScript 解析器
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+  },
 ]);
