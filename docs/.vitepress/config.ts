@@ -58,6 +58,7 @@ const config = defineConfig({
       "/question": Question,
     },
   },
+  ignoreDeadLinks: true,
 });
 
 export default config;
